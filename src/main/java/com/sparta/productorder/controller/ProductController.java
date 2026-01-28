@@ -24,7 +24,17 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity getProduct() {
+    public ResponseEntity getProducts() {
         return productService.getProducts();
+    }
+
+    @PatchMapping("/product")
+    public ResponseEntity modifyProduct(@RequestBody ProductDto request) {
+        return productService.modifyProduct(request);
+    }
+
+    @DeleteMapping("/product/{productId}")
+    public ResponseEntity deleteProduct(@PathVariable String productId) {
+        return productService.deleteProduct(productId);
     }
 }

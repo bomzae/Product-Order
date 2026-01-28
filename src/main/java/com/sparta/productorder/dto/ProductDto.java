@@ -6,5 +6,5 @@ import lombok.Getter;
 public class ProductDto {
     private String productId;
     private String name;
-    private int price;
+    private Integer price;
 }

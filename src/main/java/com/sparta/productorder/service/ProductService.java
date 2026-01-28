@@ -45,7 +45,6 @@ public class ProductService {
 
     }
 
-
     // 상품 목록 조회
     public ResponseEntity<DefaultResponse> getProducts() {
         List<Product> products = productRepository.findAll();
@@ -65,4 +64,30 @@ public class ProductService {
 
         return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "상품 목록 조회 결과입니다.", response.toString()), HttpStatus.OK);
     }
+
+    // 상품 수정
+    public ResponseEntity<DefaultResponse> modifyProduct(ProductDto request) {
+        Product product = productRepository.findByProductId(request.getProductId());
+        if (product == null) {
+            return new ResponseEntity<>(DefaultResponse.from(StatusCode.NOT_FOUND, "존재하지 않는 상품입니다."), HttpStatus.OK);
+        }
+
+        if (request.getName() != null) product.setName(request.getName());
+        if (request.getPrice() != null) product.setPrice(request.getPrice());
+        productRepository.save(product);
+
+        return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "상품 정보를 수정했습니다."), HttpStatus.OK);
+    }
+
+    // 상품 삭제
+    public ResponseEntity<DefaultResponse> deleteProduct(String productId) {
+        Product product = productRepository.findByProductId(productId);
+        if (product == null) {
+            return new ResponseEntity<>(DefaultResponse.from(StatusCode.NOT_FOUND, "존재하지 않는 상품입니다."), HttpStatus.OK);
+        }
+        productRepository.delete(product);
+
+        return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "상품 삭제에 성공하였습니다."), HttpStatus.OK);
+    }
+
 }
