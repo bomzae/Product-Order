@@ -1,16 +1,14 @@
 package com.sparta.productorder.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product {
@@ -25,5 +23,13 @@ public class Product {
     private int price;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<Order> orders;
+    private List<Orders> orders;
+
+    public static Product create(String productId, String name, int price) {
+        return Product.builder()
+                .productId(productId)
+                .name(name)
+                .price(price)
+                .build();
+    }
 }
