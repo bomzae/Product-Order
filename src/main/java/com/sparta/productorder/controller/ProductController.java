@@ -4,9 +4,9 @@ import com.sparta.productorder.dto.ProductDto;
 import com.sparta.productorder.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,5 +16,15 @@ public class ProductController {
     @PostMapping("/product")
     public ResponseEntity postProduct(@RequestBody ProductDto request) {
         return productService.postProduct(request);
+    }
+
+    @GetMapping("/product/{productId}")
+    public ResponseEntity getProduct(@PathVariable String productId) {
+        return productService.getProduct(productId);
+    }
+
+    @GetMapping("/products")
+    public ResponseEntity getProduct() {
+        return productService.getProducts();
     }
 }
