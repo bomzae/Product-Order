@@ -40,7 +40,7 @@ public class ProductService {
             return new ResponseEntity<>(DefaultResponse.from(StatusCode.NOT_FOUND, "존재하지 않는 상품입니다."), HttpStatus.OK);
         }
 
-        String response = "상품 ID: " + product.getProductId() + "\n상품 이름: " + product.getName() + "\n상품 가격: " + product.getPrice();
+        String response = "상품 ID: " + product.getProductId() + ", 상품 이름: " + product.getName() + ", 상품 가격: " + product.getPrice() + "원";
         return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "상품 조회 결과입니다.", response), HttpStatus.OK);
 
     }
@@ -59,8 +59,8 @@ public class ProductService {
             product = products.get(i);
 
             response.append("상품 ID: ").append(product.getProductId())
-                    .append("\n상품 이름: ").append(product.getName())
-                    .append("\n상품 가격: ").append(product.getPrice()).append("\n\n");
+                    .append(", 상품 이름: ").append(product.getName())
+                    .append(", 상품 가격: ").append(product.getPrice()).append("원.");
         }
 
         return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "상품 목록 조회 결과입니다.", response.toString()), HttpStatus.OK);
