@@ -1,14 +1,12 @@
 package com.sparta.productorder.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Orders {
@@ -21,4 +19,9 @@ public class Orders {
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     private Product product;
 
+    public static Orders create(Product product) {
+        return Orders.builder()
+                .product(product)
+                .build();
+    }
 }
