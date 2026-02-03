@@ -24,7 +24,7 @@ public class ProductService {
             return new ResponseEntity<>(DefaultResponse.from(StatusCode.CONFLICT, "같은 아이디로 등록된 상품이 있습니다."), HttpStatus.OK);
         }
 
-        product = Product.create(request.getProductId(), request.getName(), request.getPrice());
+        product = Product.create(request.getProductId(), request.getName(), request.getPrice(), 2);
         productRepository.save(product);
 
         return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "상품 등록에 성공하였습니다."), HttpStatus.OK);
