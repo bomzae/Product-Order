@@ -2,7 +2,6 @@ package com.sparta.productorder.service;
 
 import com.sparta.productorder.context.StatusCode;
 import com.sparta.productorder.dto.DefaultResponse;
-import com.sparta.productorder.dto.OrderDto;
 import com.sparta.productorder.entity.Orders;
 import com.sparta.productorder.entity.Product;
 import com.sparta.productorder.repository.OrderRepository;
@@ -16,6 +15,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +55,8 @@ public class OrderService {
             return new ResponseEntity<>(DefaultResponse.from(StatusCode.NOT_FOUND, "존재하지 않는 주문입니다."), HttpStatus.OK);
         }
 
-        String response = "주문 ID: " + orders.getOrderId() + ", 상품 이름: " + orders.getProduct().getName() + ", 상품 가격: " + orders.getProduct().getPrice() + "원";
+        String response = String.format("주문 ID: %s, 상품 이름: %s, 상품 가격: %d원",
+                orders.getOrderId(), orders.getProduct().getName(), orders.getProduct().getPrice());
         return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "주문 조회 결과입니다.", response), HttpStatus.OK);
     }
 
@@ -62,6 +65,14 @@ public class OrderService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("orderId").ascending());
         Page<Orders> orders = orderRepository.findAll(pageable);
 
-        return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "주문 목록 조회 결과입니다.", orders.map(OrderDto::new)), HttpStatus.OK);
+        List<String> response = new ArrayList<>();
+        response.add(String.format("페이지: %d / %d", orders.getNumber() + 1, orders.getTotalPages()));
+
+        for (Orders order: orders) {
+            response.add(String.format("주문 ID: %s, 상품 이름: %s, 상품 가격: %d원",
+                    order.getOrderId(), order.getProduct().getName(), order.getProduct().getPrice()));
+        }
+
+        return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "주문 목록 조회 결과입니다.", response), HttpStatus.OK);
     }
 }
