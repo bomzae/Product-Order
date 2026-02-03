@@ -51,12 +51,13 @@ public class ProductService {
         if (products.isEmpty()) {
             return new ResponseEntity<>(DefaultResponse.from(StatusCode.NOT_FOUND, "상품이 존재하지 않습니다."), HttpStatus.OK);
         }
+
         List<String> response = products.stream()
                 .map(product -> String.format("상품 ID: %s, 상품 이름: %s, 상품 가격: %d원, 상품 재고: %d개",
                         product.getProductId(), product.getName(), product.getPrice(), product.getStock()))
                 .toList();
 
-        return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "상품 목록 조회 결과입니다.", response.toString()), HttpStatus.OK);
+        return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "상품 목록 조회 결과입니다.", response), HttpStatus.OK);
     }
 
     // 상품 수정
@@ -84,5 +85,4 @@ public class ProductService {
 
         return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "상품 삭제에 성공하였습니다."), HttpStatus.OK);
     }
-
 }
