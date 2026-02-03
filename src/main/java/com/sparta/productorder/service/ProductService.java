@@ -24,7 +24,7 @@ public class ProductService {
             return new ResponseEntity<>(DefaultResponse.from(StatusCode.CONFLICT, "같은 아이디로 등록된 상품이 있습니다."), HttpStatus.OK);
         }
 
-        product = Product.create(request.getProductId(), request.getName(), request.getPrice(), 2);
+        product = Product.create(request.getProductId(), request.getName(), request.getPrice(), request.getStock());
         productRepository.save(product);
 
         return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "상품 등록에 성공하였습니다."), HttpStatus.OK);
@@ -38,7 +38,8 @@ public class ProductService {
             return new ResponseEntity<>(DefaultResponse.from(StatusCode.NOT_FOUND, "존재하지 않는 상품입니다."), HttpStatus.OK);
         }
 
-        String response = "상품 ID: " + product.getProductId() + ", 상품 이름: " + product.getName() + ", 상품 가격: " + product.getPrice() + "원";
+        String response =  String.format("상품 ID: %s, 상품 이름: %s, 상품 가격: %d원, 상품 재고: %d개",
+                product.getProductId(), product.getName(), product.getPrice(), product.getStock());
         return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "상품 조회 결과입니다.", response), HttpStatus.OK);
 
     }
@@ -51,16 +52,12 @@ public class ProductService {
             return new ResponseEntity<>(DefaultResponse.from(StatusCode.NOT_FOUND, "상품이 존재하지 않습니다."), HttpStatus.OK);
         }
 
-        Product product; StringBuilder response = new StringBuilder();
-        for (int i = 0; i < products.size(); i++) {
-            product = products.get(i);
+        List<String> response = products.stream()
+                .map(product -> String.format("상품 ID: %s, 상품 이름: %s, 상품 가격: %d원, 상품 재고: %d개",
+                        product.getProductId(), product.getName(), product.getPrice(), product.getStock()))
+                .toList();
 
-            response.append("상품 ID: ").append(product.getProductId())
-                    .append(", 상품 이름: ").append(product.getName())
-                    .append(", 상품 가격: ").append(product.getPrice()).append("원.");
-        }
-
-        return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "상품 목록 조회 결과입니다.", response.toString()), HttpStatus.OK);
+        return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "상품 목록 조회 결과입니다.", response), HttpStatus.OK);
     }
 
     // 상품 수정
@@ -72,6 +69,7 @@ public class ProductService {
 
         if (request.getName() != null) product.setName(request.getName());
         if (request.getPrice() != null) product.setPrice(request.getPrice());
+        if (request.getStock() != null) product.setStock(request.getStock());
         productRepository.save(product);
 
         return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "상품 정보를 수정했습니다."), HttpStatus.OK);
@@ -87,5 +85,4 @@ public class ProductService {
 
         return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "상품 삭제에 성공하였습니다."), HttpStatus.OK);
     }
-
 }

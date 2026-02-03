@@ -20,4 +20,7 @@ public class OrderController {
     public ResponseEntity getOrder(@PathVariable long orderId) {
         return orderService.getOrder(orderId);
     }
+
+    @GetMapping("/list")
+    public ResponseEntity getOrders(@RequestParam int page, @RequestParam int size) { return orderService.getOrders(page, size); }
 }
