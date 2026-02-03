@@ -22,14 +22,18 @@ public class Product {
     @Column
     private int price;
 
+    @Column
+    private int stock;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<Orders> orders;
 
-    public static Product create(String productId, String name, int price) {
+    public static Product create(String productId, String name, int price, int stock) {
         return Product.builder()
                 .productId(productId)
                 .name(name)
                 .price(price)
+                .stock(stock)
                 .build();
     }
 }

@@ -6,6 +6,7 @@ import com.sparta.productorder.entity.Orders;
 import com.sparta.productorder.entity.Product;
 import com.sparta.productorder.repository.OrderRepository;
 import com.sparta.productorder.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +19,19 @@ public class OrderService {
     private final ProductRepository productRepository;
 
     // 주문 생성
+    @Transactional
     public ResponseEntity<DefaultResponse> postOrder(String productId) {
         Product product = productRepository.findByProductId(productId);
 
         if (product == null) {
             return new ResponseEntity<>(DefaultResponse.from(StatusCode.NOT_FOUND, "존재하지 않는 상품입니다."), HttpStatus.OK);
+        }
+
+        // 재고 차감
+        int updateCount = productRepository.subStock(productId);
+        // 재고가 없다면 주문 불가
+        if (updateCount <= 0) {
+            return new ResponseEntity<>(DefaultResponse.from(StatusCode.BAD_REQUEST, "상품 재고가 없습니다."), HttpStatus.OK);
         }
 
         Orders orders = Orders.create(product);
