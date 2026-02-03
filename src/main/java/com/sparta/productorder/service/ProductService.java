@@ -24,7 +24,7 @@ public class ProductService {
             return new ResponseEntity<>(DefaultResponse.from(StatusCode.CONFLICT, "같은 아이디로 등록된 상품이 있습니다."), HttpStatus.OK);
         }
 
-        product = Product.create(request.getProductId(), request.getName(), request.getPrice(), 2);
+        product = Product.create(request.getProductId(), request.getName(), request.getPrice(), request.getStock());
         productRepository.save(product);
 
         return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "상품 등록에 성공하였습니다."), HttpStatus.OK);
@@ -72,6 +72,7 @@ public class ProductService {
 
         if (request.getName() != null) product.setName(request.getName());
         if (request.getPrice() != null) product.setPrice(request.getPrice());
+        if (request.getStock() != null) product.setStock(request.getStock());
         productRepository.save(product);
 
         return new ResponseEntity<>(DefaultResponse.from(StatusCode.OK, "상품 정보를 수정했습니다."), HttpStatus.OK);
