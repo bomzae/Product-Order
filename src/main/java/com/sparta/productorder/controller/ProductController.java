@@ -6,34 +6,33 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
+@RequestMapping("/product")
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
 
-    @PostMapping("/product")
+    @PostMapping("")
     public ResponseEntity postProduct(@RequestBody ProductDto request) {
         return productService.postProduct(request);
     }
 
-    @GetMapping("/product/{productId}")
+    @GetMapping("/{productId}")
     public ResponseEntity getProduct(@PathVariable String productId) {
         return productService.getProduct(productId);
     }
 
-    @GetMapping("/products")
+    @GetMapping("/list")
     public ResponseEntity getProducts() {
         return productService.getProducts();
     }
 
-    @PatchMapping("/product")
+    @PatchMapping("")
     public ResponseEntity modifyProduct(@RequestBody ProductDto request) {
         return productService.modifyProduct(request);
     }
 
-    @DeleteMapping("/product/{productId}")
+    @DeleteMapping("/{productId}")
     public ResponseEntity deleteProduct(@PathVariable String productId) {
         return productService.deleteProduct(productId);
     }

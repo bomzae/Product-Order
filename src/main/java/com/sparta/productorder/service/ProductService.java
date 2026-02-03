@@ -4,7 +4,6 @@ import com.sparta.productorder.context.StatusCode;
 import com.sparta.productorder.dto.DefaultResponse;
 import com.sparta.productorder.dto.ProductDto;
 import com.sparta.productorder.entity.Product;
-import com.sparta.productorder.repository.OrderRepository;
 import com.sparta.productorder.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-    private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
 
     // 상품 등록
